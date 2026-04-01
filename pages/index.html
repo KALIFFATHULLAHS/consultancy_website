@@ -16,7 +16,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 
 <body>
@@ -32,20 +33,32 @@
 
             <div class="collapse navbar-collapse" id="navmenu">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">Innovation</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#services">Solutions</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#process">Framework</a></li>
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0 d-flex align-items-center">
-                        <a class="nav-link" href="login.html"><i class="bi bi-person-circle me-1"></i> Login</a>
-                    </li>
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <a class="btn btn-accent rounded-pill px-4 py-2" href="#contact">Schedule Consultation</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#about">Innovation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#services">Solutions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#process">Framework</a></li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="/#contact">Contact</a>
+                        </li>
+                        <li class="nav-item ms-lg-3" id="authNav">
+                            <a class="btn btn-accent btn-sm rounded-pill px-4" href="/login.html">Sign In</a>
+                        </li>
                 </ul>
             </div>
         </div>
     </nav>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+        <div id="liveToast" class="toast align-items-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">
+                    Welcome back!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
 
     <!-- HERO SECTION -->
     <header class="hero d-flex align-items-center"
@@ -309,20 +322,25 @@
             <h2 class="display-4 fw-bold mb-4 font-playfair">Ready to modernize your infrastructure?</h2>
             <p class="lead text-gray-400 mb-5 max-w-700 mx-auto">Engage with our lead engineers and systems architects
                 for a confidential briefing on how NEXGEN can catalyze your digital trajectory.</p>
-            <form class="bg-white p-4 p-md-5 rounded-4 shadow-lg text-start max-w-700 mx-auto">
+            <form id="consultationForm" class="bg-white p-4 p-md-5 rounded-4 shadow-lg text-start max-w-700 mx-auto position-relative">
+                <div id="formSuccessOverlay" class="d-none position-absolute top-0 start-0 w-100 h-100 bg-white rounded-4 flex-column align-items-center justify-content-center z-1 text-center" style="display: flex;">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    <h3 class="text-dark fw-bold mt-3">We will contact you</h3>
+                    <p class="text-muted">A consultant will be in touch shortly.</p>
+                </div>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label text-dark fw-medium small">Full Name</label>
-                        <input type="text" class="form-control form-control-lg bg-light border-0" placeholder="Kaliff">
+                        <input type="text" id="consultName" class="form-control form-control-lg bg-light border-0" placeholder="Kaliff" autocomplete="name" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label text-dark fw-medium small">Corporate Email</label>
-                        <input type="email" class="form-control form-control-lg bg-light border-0"
-                            placeholder="kaliff@company.com">
+                        <input type="email" id="consultEmail" class="form-control form-control-lg bg-light border-0"
+                            placeholder="kaliff@company.com" autocomplete="email" required>
                     </div>
                     <div class="col-12">
                         <label class="form-label text-dark fw-medium small">Inquiry Focus</label>
-                        <select class="form-select form-select-lg bg-light border-0 text-muted">
+                        <select id="consultService" class="form-select form-select-lg bg-light border-0 text-muted">
                             <option>Digital Transformation</option>
                             <option>IoT Interfacing</option>
                             <option>Automation & RPA</option>
@@ -330,15 +348,54 @@
                             <option>Custom Tech Solutions</option>
                         </select>
                     </div>
+                    
+                    <div id="consultAlert" class="col-12 alert alert-danger d-none small mt-3 mb-0"></div>
+
                     <div class="col-12 mt-4 text-center">
-                        <a href="login.html"
-                            class="btn btn-accent btn-lg rounded-pill w-100 py-3 fw-bold text-decoration-none text-white d-block">Request
-                            Technical Consultation</a>
+                        <button type="submit" id="consultSubmitBtn"
+                            class="btn btn-accent btn-lg rounded-pill w-100 py-3 fw-bold text-decoration-none text-white d-flex align-items-center justify-content-center border-0">
+                            <span id="consultSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
+                            <span>Request Technical Consultation</span>
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
     </section>
+
+    <!-- CHATBOT UI -->
+    <div id="chatbotContainer" class="position-fixed" style="bottom: 30px; right: 30px; z-index: 1050; display: flex; flex-direction: column; align-items: flex-end;">
+        <div id="chatbotWindow" class="d-none bg-white rounded-4 shadow-lg overflow-hidden border border-light mb-3" style="width: 350px; height: 450px; display: flex; flex-direction: column;">
+            <div class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <span class="brand-symbol me-2 fs-6">NG</span>
+                    <h6 class="mb-0 fw-bold">NEXGEN Assistant</h6>
+                </div>
+                <button id="chatbotClose" class="btn btn-link text-white p-0"><i class="bi bi-x-lg"></i></button>
+            </div>
+            
+            <div id="chatbotMessages" class="p-3 flex-grow-1 overflow-auto bg-light" style="display: flex; flex-direction: column; gap: 10px;">
+                <div class="bg-white p-2 rounded-3 shadow-sm border" style="max-width: 85%; align-self: flex-start; border-radius: 2px 15px 15px 15px !important;">
+                    <p class="mb-0 small text-dark">Hello! I'm the NEXGEN AI Assistant. How can I help you with our strategic services today?</p>
+                </div>
+                <!-- Typing Indicator -->
+                <div id="chatbotTyping" class="d-none bg-white p-2 rounded-3 shadow-sm border" style="max-width: fit-content; align-self: flex-start; border-radius: 2px 15px 15px 15px !important;">
+                    <p class="mb-0 small text-muted italic"><i class="bi bi-three-dots"></i> Assistant is typing...</p>
+                </div>
+            </div>
+
+            <form id="chatbotForm" class="p-2 border-top bg-white d-flex align-items-center gap-2">
+                <input type="text" id="chatbotInput" class="form-control form-control-sm border-0 bg-light rounded-pill px-3 py-2" placeholder="Type your message..." autocomplete="off" required>
+                <button type="submit" class="btn btn-accent rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                    <i class="bi bi-send-fill small"></i>
+                </button>
+            </form>
+        </div>
+        
+        <button id="chatbotToggle" class="btn btn-accent rounded-circle shadow-lg d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+            <i class="bi bi-chat-dots-fill fs-3"></i>
+        </button>
+    </div>
 
     <!-- FOOTER -->
     <footer class="footer bg-dark-deep text-gray-400 pt-5 pb-4 border-top border-secondary">
@@ -405,6 +462,187 @@
             } else {
                 navbar.classList.remove('bg-nav-scrolled', 'shadow-sm', 'py-2');
                 navbar.classList.add('py-3');
+            }
+        });
+
+        // App Logic
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Toast helper
+            const showToast = (message) => {
+                const toastEl = document.getElementById('liveToast');
+                document.getElementById('toastMessage').textContent = message;
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            };
+
+            // URL Param actions
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('login') === 'success') {
+                showToast("Login Successful! Welcome back.");
+                // Clean up URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            
+            if (urlParams.get('error') === 'access_denied') {
+                showToast("Access Denied: Administrative rights required.");
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // Check Auth State
+            try {
+                const res = await fetch('/api/auth/me');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.authenticated) {
+                        console.log('[Auth] User identified:', data.user.email);
+                        const authNav = document.getElementById('authNav');
+                        let adminLink = "";
+                        
+                        // Strict Boolean Assessment
+                        if (data.user && data.user.isAdmin === true) {
+                            console.log('[Auth] Admin Privileges: GRANTED');
+                            adminLink = `<li><a class="dropdown-item small py-2" href="/requests.html"><i class="bi bi-clipboard-data me-2"></i> Admin Dashboard</a></li>
+                                         <li><hr class="dropdown-divider"></li>`;
+                        }
+
+                        authNav.innerHTML = `
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center cursor-pointer" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle fs-5 me-2 text-accent"></i> ${data.user.name}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2 animate-fadeIn">
+                                    <li><a class="dropdown-item small py-2" href="/profile.html"><i class="bi bi-person me-2"></i> My Account</a></li>
+                                    ${adminLink}
+                                    <li><a class="dropdown-item small py-2 text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+                                </ul>
+                            </div>
+                        `;
+                        
+                        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                            e.preventDefault();
+                            await fetch('/api/auth/logout', { method: 'POST' });
+                            window.location.reload();
+                        });
+                    }
+                }
+            } catch(e) { console.error('Error fetching user data', e); }
+
+            // Consultation Form Submission
+            const consultForm = document.getElementById('consultationForm');
+            if (consultForm) {
+                consultForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('consultName').value;
+                    const email = document.getElementById('consultEmail').value;
+                    const serviceCategory = document.getElementById('consultService').value;
+                    const alertBox = document.getElementById('consultAlert');
+                    const submitBtn = document.getElementById('consultSubmitBtn');
+                    const spinner = document.getElementById('consultSpinner');
+                    
+                    submitBtn.disabled = true;
+                    spinner.classList.remove('d-none');
+
+                    try {
+                        const res = await fetch('/api/inquiry', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name, email, serviceCategory })
+                        });
+                        const data = await res.json();
+                        
+                        if (data.success) {
+                            document.getElementById('formSuccessOverlay').classList.remove('d-none');
+                            alertBox.classList.add('d-none');
+                            showToast("Consultation Request Sent Successfully!");
+                        } else {
+                            alertBox.textContent = data.message || "Failed to submit inquiry.";
+                            alertBox.classList.remove('d-none');
+                            submitBtn.disabled = false;
+                            spinner.classList.add('d-none');
+                        }
+                    } catch(error) {
+                        alertBox.textContent = "Server error. Please try again.";
+                        alertBox.classList.remove('d-none');
+                        submitBtn.disabled = false;
+                        spinner.classList.add('d-none');
+                    }
+                });
+            }
+
+            // Chatbot Logic
+            const chatbotWindow = document.getElementById('chatbotWindow');
+            const chatbotToggle = document.getElementById('chatbotToggle');
+            const chatbotClose = document.getElementById('chatbotClose');
+            const chatbotForm = document.getElementById('chatbotForm');
+            const chatbotInput = document.getElementById('chatbotInput');
+            const chatbotMessages = document.getElementById('chatbotMessages');
+
+            if (chatbotToggle) {
+                chatbotToggle.addEventListener('click', () => {
+                    chatbotWindow.classList.toggle('d-none');
+                    chatbotToggle.style.display = chatbotWindow.classList.contains('d-none') ? 'flex' : 'none';
+                });
+            }
+
+            if (chatbotClose) {
+                chatbotClose.addEventListener('click', () => {
+                    chatbotWindow.classList.add('d-none');
+                    chatbotToggle.style.display = 'flex';
+                });
+            }
+
+            const appendMessage = (text, isUser) => {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `p-2 rounded-3 shadow-sm ${isUser ? 'text-white border-0' : 'bg-white text-dark border'}`;
+                msgDiv.style.maxWidth = '85%';
+                msgDiv.style.alignSelf = isUser ? 'flex-end' : 'flex-start';
+                msgDiv.style.borderRadius = isUser ? '15px 15px 2px 15px' : '2px 15px 15px 15px';
+                if (isUser) {
+                    msgDiv.style.backgroundColor = 'var(--color-accent)';
+                }
+                
+                // Simple Markdown-like formatting (bullets for * and -)
+                let formattedText = text
+                    .replace(/\n\s*[\*\-]\s/g, '<br>• ') // Bullets
+                    .replace(/\n/g, '<br>') // Newlines
+                    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'); // Bold
+                
+                msgDiv.innerHTML = `<p class="mb-0 small">${formattedText}</p>`;
+                
+                // Insert before typing indicator
+                const typingNode = document.getElementById('chatbotTyping');
+                chatbotMessages.insertBefore(msgDiv, typingNode);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            };
+
+            if (chatbotForm) {
+                chatbotForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const text = chatbotInput.value.trim();
+                    if (!text) return;
+                    
+                    appendMessage(text, true);
+                    chatbotInput.value = '';
+                    
+                    const typingIndicator = document.getElementById('chatbotTyping');
+                    typingIndicator.classList.remove('d-none');
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+                    try {
+                        const res = await fetch('/api/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: text })
+                        });
+                        const data = await res.json();
+                        typingIndicator.classList.add('d-none');
+                        appendMessage(data.reply || "Sorry, I couldn't process that.", false);
+                    } catch(error) {
+                        typingIndicator.classList.add('d-none');
+                        appendMessage("Error communicating with the server.", false);
+                    }
+                });
             }
         });
     </script>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | NEXGEN Advisory</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-uppercase tracking-wide d-flex align-items-center" href="/">
+                <span class="brand-symbol me-2">NG</span>
+                <span>NEXGEN<span class="text-accent">.</span> Profile</span>
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                <a class="btn btn-outline-light btn-sm rounded-pill px-3" href="/">Return Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card-header bg-dark text-white p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-accent rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="bi bi-person-fill fs-2"></i>
+                            </div>
+                            <div>
+                                <h3 id="profileName" class="mb-0 fw-bold">Loading...</h3>
+                                <p id="profileEmail" class="mb-0 text-gray-400 small">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h6 class="text-muted text-uppercase fw-bold small mb-3">Account Security</h6>
+                                <div class="bg-light p-3 rounded-3 border">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-0 fw-medium small">Email Status</p>
+                                            <p class="mb-0 text-success fw-bold small"><i class="bi bi-check-circle-fill"></i> Verified</p>
+                                        </div>
+                                        <i class="bi bi-shield-lock-fill text-muted fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted text-uppercase fw-bold small mb-3">Service Tier</h6>
+                                <div class="bg-light p-3 rounded-3 border">
+                                    <p class="mb-0 fw-medium small">Your Current Package</p>
+                                    <p class="mb-0 text-accent fw-bold small">Enterprise Strategy Tier</p>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-5 border-top pt-4 text-center">
+                                <p class="text-muted small">Account created: <span id="profileDate" class="fw-bold">...</span></p>
+                                <button onclick="logout()" class="btn btn-outline-danger rounded-pill px-4 btn-sm mt-2">Sign Out Permanently</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/auth/me');
+                const data = await res.json();
+                
+                if (data.authenticated) {
+                    document.getElementById('profileName').textContent = data.user.name;
+                    document.getElementById('profileEmail').textContent = data.user.email;
+                    document.getElementById('profileDate').textContent = new Date(data.user.createdAt || Date.now()).toLocaleDateString('en-US', {
+                        year: 'numeric', month: 'long', day: 'numeric'
+                    });
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (err) {
+                console.error(err);
+                window.location.href = '/';
+            }
+        });
+
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

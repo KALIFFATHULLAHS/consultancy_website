@@ -16,7 +16,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 
 <body>
@@ -24,7 +25,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg fixed-top py-3 bg-nav-scrolled shadow-sm" id="mainNav">
         <div class="container">
-            <a class="navbar-brand fw-bold text-uppercase tracking-wide d-flex align-items-center" href="index.html"><span
+            <a class="navbar-brand fw-bold text-uppercase tracking-wide d-flex align-items-center" href="/"><span
                     class="brand-symbol me-2">NG</span>NEXGEN<span class="text-accent">.</span></a>
         </div>
     </nav>
@@ -47,14 +48,14 @@
                                 <p class="text-muted">Sign in to your NEXGEN account</p>
                             </div>
 
-                            <form action="login.html" method="POST">
+                            <form id="loginForm">
                                 <div class="mb-3">
                                     <label class="form-label text-dark fw-medium small">Email Address</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light border-0"><i
                                                 class="bi bi-envelope text-muted"></i></span>
-                                        <input type="email" class="form-control form-control-lg bg-light border-0"
-                                            placeholder="name@company.com" required>
+                                        <input type="email" id="loginEmail" class="form-control form-control-lg bg-light border-0"
+                                            placeholder="name@company.com" autocomplete="username" required>
                                     </div>
                                 </div>
                                 <div class="mb-4">
@@ -66,13 +67,18 @@
                                     <div class="input-group">
                                         <span class="input-group-text bg-light border-0"><i
                                                 class="bi bi-lock text-muted"></i></span>
-                                        <input type="password" class="form-control form-control-lg bg-light border-0"
-                                            placeholder="••••••••" required>
+                                        <input type="password" id="loginPassword" class="form-control form-control-lg bg-light border-0"
+                                            placeholder="••••••••" autocomplete="current-password" required>
                                     </div>
                                 </div>
 
-                                <button type="submit"
-                                    class="btn btn-accent btn-lg w-100 rounded-pill fw-bold mb-4 shadow-sm">Sign In</button>
+                                <div id="loginAlert" class="alert alert-danger d-none small"></div>
+
+                                <button type="submit" id="loginBtn"
+                                    class="btn btn-accent btn-lg w-100 rounded-pill fw-bold mb-4 shadow-sm d-flex align-items-center justify-content-center">
+                                    <span id="loginSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
+                                    <span>Sign In</span>
+                                </button>
 
                                 <div class="d-flex align-items-center mb-4">
                                     <hr class="flex-grow-1 text-muted opacity-25">
@@ -81,22 +87,17 @@
                                 </div>
 
                                 <div class="d-grid gap-3">
-                                    <button type="button"
-                                        class="btn btn-outline-secondary btn-lg rounded-pill fw-medium d-flex align-items-center justify-content-center bg-white border-2">
+                                    <a href="/api/auth/google"
+                                        class="btn btn-outline-secondary btn-lg rounded-pill fw-medium d-flex align-items-center justify-content-center bg-white border-2 text-decoration-none text-dark">
                                         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
                                             alt="Google" width="22" class="me-2">
                                         Sign in with Google
-                                    </button>
-                                    <button type="button"
-                                        class="btn btn-outline-secondary btn-lg rounded-pill fw-medium d-flex align-items-center justify-content-center bg-white border-2">
-                                        <i class="bi bi-envelope-at me-2 fs-5 text-dark"></i>
-                                        Sign in with other mails
-                                    </button>
+                                    </a>
                                 </div>
                             </form>
                         </div>
                         <div class="card-footer bg-light border-0 text-center py-4">
-                            <p class="mb-0 text-muted">Don't have an account? <a href="#"
+                            <p class="mb-0 text-muted">Don't have an account? <a href="signup.html"
                                     class="text-accent text-decoration-none fw-bold">Create Account</a></p>
                         </div>
                     </div>
@@ -107,6 +108,52 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const alertBox = document.getElementById('loginAlert');
+            const submitBtn = document.getElementById('loginBtn');
+            const spinner = document.getElementById('loginSpinner');
+            
+            // Show loading state
+            alertBox.classList.add('d-none');
+            submitBtn.disabled = true;
+            spinner.classList.remove('d-none');
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = '/?login=success';
+                } else {
+                    alertBox.textContent = data.message;
+                    alertBox.classList.remove('d-none');
+                    submitBtn.disabled = false;
+                    spinner.classList.add('d-none');
+                }
+            } catch (error) {
+                alertBox.textContent = 'Server Error. Please try again.';
+                alertBox.classList.remove('d-none');
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+            }
+        });
+        
+        // Check url params for error (like google auth failed)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === 'google_auth_failed') {
+            const alertBox = document.getElementById('loginAlert');
+            alertBox.textContent = 'Google Authentication failed. Please try again.';
+            alertBox.classList.remove('d-none');
+        }
+    </script>
 </body>
 
 </html>

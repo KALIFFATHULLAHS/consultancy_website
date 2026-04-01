@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | NEXGEN Advisory</title>
+    <!-- Google Fonts: Outfit and Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top py-3 bg-nav-scrolled shadow-sm" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-uppercase tracking-wide d-flex align-items-center" href="/"><span
+                    class="brand-symbol me-2">NG</span>NEXGEN<span class="text-accent">.</span></a>
+        </div>
+    </nav>
+
+    <!-- SIGNUP SECTION -->
+    <section class="min-vh-100 d-flex align-items-center justify-content-center pt-5"
+        style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80'); background-size: cover; background-position: center; position: relative;">
+        <!-- Overlay -->
+        <div
+            style="position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(135deg, rgba(10, 17, 40, 0.95) 0%, rgba(10, 17, 40, 0.8) 100%); z-index: 1;">
+        </div>
+
+        <div class="container position-relative z-1 py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white">
+                        <div class="card-body p-4 p-sm-5">
+                            <div class="text-center mb-4">
+                                <h3 class="fw-bold font-playfair mb-1 text-dark">Create Account</h3>
+                                <p class="text-muted">Join NEXGEN to access premium services</p>
+                            </div>
+
+                            <form id="signupForm">
+                                <div class="mb-3">
+                                    <label class="form-label text-dark fw-medium small">Full Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i
+                                                class="bi bi-person text-muted"></i></span>
+                                        <input type="text" id="signupName" class="form-control form-control-lg bg-light border-0"
+                                            placeholder="Kaliff" autocomplete="name" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-dark fw-medium small">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i
+                                                class="bi bi-envelope text-muted"></i></span>
+                                        <input type="email" id="signupEmail" class="form-control form-control-lg bg-light border-0"
+                                            placeholder="name@company.com" autocomplete="email" required>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-dark fw-medium small mb-1">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i
+                                                class="bi bi-lock text-muted"></i></span>
+                                        <input type="password" id="signupPassword" class="form-control form-control-lg bg-light border-0"
+                                            placeholder="••••••••" autocomplete="new-password" required>
+                                    </div>
+                                </div>
+
+                                <div id="signupAlert" class="alert alert-danger d-none small"></div>
+
+                                <button type="submit" id="signupBtn"
+                                    class="btn btn-accent btn-lg w-100 rounded-pill fw-bold mb-4 shadow-sm d-flex align-items-center justify-content-center">
+                                    <span id="signupSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
+                                    <span>Sign Up</span>
+                                </button>
+
+                                <div class="d-flex align-items-center mb-4">
+                                    <hr class="flex-grow-1 text-muted opacity-25">
+                                    <span class="mx-3 text-muted small fw-bold tracking-wider">OR</span>
+                                    <hr class="flex-grow-1 text-muted opacity-25">
+                                </div>
+
+                                <div class="d-grid gap-3">
+                                    <!-- Google Login button points to backend route -->
+                                    <a href="/api/auth/google"
+                                        class="btn btn-outline-secondary btn-lg rounded-pill fw-medium d-flex align-items-center justify-content-center bg-white border-2 text-decoration-none text-dark">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
+                                            alt="Google" width="22" class="me-2">
+                                        Sign in with Google
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer bg-light border-0 text-center py-4">
+                            <p class="mb-0 text-muted">Already have an account? <a href="login.html"
+                                    class="text-accent text-decoration-none fw-bold">Sign In</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const alertBox = document.getElementById('signupAlert');
+            const submitBtn = document.getElementById('signupBtn');
+            const spinner = document.getElementById('signupSpinner');
+            
+            // Show loading state
+            alertBox.classList.add('d-none');
+            submitBtn.disabled = true;
+            spinner.classList.remove('d-none');
+
+            try {
+                const res = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = '/?login=success';
+                } else {
+                    alertBox.textContent = data.message;
+                    alertBox.classList.remove('d-none');
+                    submitBtn.disabled = false;
+                    spinner.classList.add('d-none');
+                }
+            } catch (error) {
+                alertBox.textContent = 'Server Error. Please try again.';
+                alertBox.classList.remove('d-none');
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+            }
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

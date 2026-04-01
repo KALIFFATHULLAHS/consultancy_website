@@ -1,0 +1,42 @@
+{
+  "company_name": "NEXGEN Advisory",
+  "vision": "Architecting the Digital Frontier by empowering enterprises with cutting-edge GenAI, IoT, and Automation solutions.",
+  "hubs": [
+    { "location": "Silicon Valley", "specialty": "AI Research & Cloud Strategy" },
+    { "location": "London", "specialty": "FinTech & Digital Transformation" },
+    { "location": "Kyoto", "specialty": "IoT & Smart Manufacturing" }
+  ],
+  "services": [
+    {
+      "name": "Digital Transformation",
+      "description": "Modernizing legacy architecture and migrating critical workloads to scalable cloud environments.",
+      "technologies": ["AWS", "Azure", "Docker", "Kubernetes"]
+    },
+    {
+      "name": "IoT Solutions",
+      "description": "Connecting physical assets to edge-computing networks for real-time analytics.",
+      "technologies": ["Cisco", "NVIDIA Edge", "Azure IoT Hub"]
+    },
+    {
+      "name": "Automation & RPA",
+      "description": "Eliminating operational drag through high-volume process automation.",
+      "technologies": ["UiPath", "Custom Python Scripts", "Power Automate"]
+    },
+    {
+      "name": "Data & AI Strategy",
+      "description": "Building robust data pipelines and predictive models.",
+      "technologies": ["OpenAI", "Google Gemini", "PyTorch", "TensorFlow"]
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How do I book a consultation?",
+      "answer": "You can use the 'Schedule Consultation' button in the navigation bar or the form at the bottom of the home page. Our lead engineers will contact you within 24 hours."
+    },
+    {
+      "question": "Do you offer custom development?",
+      "answer": "Yes, our 'Custom Tech Solutions' practiced is dedicated to building bespoke software architectures tailored to your enterprise's unique DNA."
+    }
+  ],
+  "tone_of_voice": "Professional, strategic, consultative, and slightly technical. Address the user by name if they are logged in."
+}

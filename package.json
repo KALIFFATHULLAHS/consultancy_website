@@ -1,0 +1,35 @@
+{
+  "name": "consultancy_homepage_project",
+  "version": "1.0.0",
+  "description": "A modern, professional homepage for NEXGEN Tech Consultancy. Built with pure HTML and CSS to showcase technology consulting services, expertise, and previous successful projects.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KALIFFATHULLAHS/consultancy_website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/KALIFFATHULLAHS/consultancy_website/issues"
+  },
+  "homepage": "https://github.com/KALIFFATHULLAHS/consultancy_website#readme",
+  "dependencies": {
+    "@google/genai": "^1.47.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb-memory-server": "^11.0.1",
+    "mongoose": "^9.3.3",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0"
+  }
+}
