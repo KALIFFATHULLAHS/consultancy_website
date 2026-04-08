@@ -2,9 +2,10 @@
   "name": "consultancy_homepage_project",
   "version": "1.0.0",
   "description": "A modern, professional homepage for NEXGEN Tech Consultancy. Built with pure HTML and CSS to showcase technology consulting services, expertise, and previous successful projects.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
